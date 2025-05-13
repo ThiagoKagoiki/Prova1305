@@ -1,7 +1,9 @@
 const fs = require("fs")
 const crypto = require("crypto");
+let uuid = crypto.randomUUID() //id aleatorio
 const express = require("express")
 const app = express()
+
 
 
 app.use(express.json())
@@ -9,8 +11,7 @@ app.use(express.json())
 
 const salvarLogs = (nome) => {
     
-    let uuid = crypto.randomUUID() //id aleatorio
-
+    
     const data = new Date();
     const dia = data.getDate();
     const mes = data.getMonth() + 1;
@@ -35,14 +36,20 @@ app.post("/logs", (req, res) => {
 
     res.status(200).json({
         id: id,
-        msg: "Aluno registrado com sucesso"
+        msg: "Log registrado com sucesso"
     })
 })
 
-app.get("/logs", (req, res) => {
+app.get(`/:id`, (req, res) => {
     try{
+        const id = req.params.id
         const dados = fs.readFileSync("logs.txt", "utf-8")
-        res.status(200).send(dados)
+        const dvLinhas = dados.split('\n')
+        const dadosID = dvLinhas.find(dvLinha => dvLinha.trim().startsWith(`${id} -`))
+        res.status(200).json({
+            msg: `Dados lidos com sucesso para o ID: ${id}`,
+            dados: dadosID
+        })
     }catch(erro){
         res.status(500).json({erro: "Erro ao ler os logs"})
     }
