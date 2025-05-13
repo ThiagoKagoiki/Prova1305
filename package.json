@@ -9,6 +9,7 @@
   "author": "ThiagoKagoiki",
   "license": "ISC",
   "dependencies": {
+    "express": "^5.1.0",
     "gerador-nome": "^0.0.5"
   }
 }
